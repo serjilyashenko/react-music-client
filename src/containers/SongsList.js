@@ -17,12 +17,18 @@ class SongsList extends Component {
     this.handleLimitChange = this.handleLimitChange.bind(this);
   }
 
+  componentWillReceiveProps() {
+    this.setState({
+      page: 1
+    });
+  }
+
   handlePaginationChange(page) {
     this.setState({page});
   }
 
   handleLimitChange(limit) {
-    this.setState({limit});
+    this.setState({limit, page: 1});
   }
 
   renderHeader() {
