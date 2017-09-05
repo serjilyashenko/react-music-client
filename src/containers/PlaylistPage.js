@@ -3,14 +3,13 @@ import SongsList from './SongsList';
 import FilterSet from '../components/filter-set/FilterSet';
 import SelectFilter from '../components/filter-set/filters/SelectFilter';
 import {Grid, Col, Row} from 'react-bootstrap';
+import {uniqBy, map as mapBy} from 'lodash';
 
 import songs from '../fixtures/songs';
 
-function getUniqBy(list, property) {
-  return list.filter(it => it)
-    .map(it => it[property])
-    .filter(it => it)
-    .filter((it, index, self) => self.indexOf(it) === index);
+function getOptions(list, property) {
+  const mappedList = mapBy(list, property);
+  return uniqBy(mappedList).filter(it => it);
 }
 
 const filters = [
@@ -19,7 +18,7 @@ const filters = [
     property: 'artist',
     props: {
       title: 'Исполнитель',
-      options: getUniqBy(songs, 'artist'),
+      options: getOptions(songs, 'artist'),
       value: undefined
     }
   },
@@ -28,7 +27,7 @@ const filters = [
     property: 'genre',
     props: {
       title: 'Жанр',
-      options: getUniqBy(songs, 'genre'),
+      options: getOptions(songs, 'genre'),
       value: undefined
     }
   },
@@ -37,7 +36,7 @@ const filters = [
     property: 'year',
     props: {
       title: 'Год',
-      options: getUniqBy(songs, 'year'),
+      options: getOptions(songs, 'year'),
       value: undefined
     }
   }

@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {Table, Col, Row} from 'react-bootstrap';
 import Pagination from '../components/Pagination';
+import Header from './songs-list-components/Header';
 import Limits from '../components/Limits';
+import {orderBy} from 'lodash';
 
 class SongsList extends Component {
 
@@ -10,9 +12,14 @@ class SongsList extends Component {
 
     this.state = {
       page: 1,
-      limit: 10
+      limit: 10,
+      sort: {
+        property: 'title',
+        value: 'asc'
+      }
     };
 
+    this.handleSortChange = this.handleSortChange.bind(this);
     this.handlePaginationChange = this.handlePaginationChange.bind(this);
     this.handleLimitChange = this.handleLimitChange.bind(this);
   }
@@ -27,19 +34,21 @@ class SongsList extends Component {
     this.setState({page});
   }
 
+  handleSortChange(sort) {
+    this.setState({sort, page: 1});
+  }
+
   handleLimitChange(limit) {
     this.setState({limit, page: 1});
   }
 
-  renderHeader() {
-    return (
-      <tr>
-        <th>Исполнитель</th>
-        <th>Песня</th>
-        <th>Жанр</th>
-        <th>Год</th>
-      </tr>
-    );
+  getSongs() {
+    const {songs} = this.props;
+    const {sort: {property, value}} = this.state;
+    const {page, limit} = this.state;
+    const sortedSongs = orderBy(songs, property, value);
+
+    return sortedSongs.slice((page - 1) * limit, page * limit);
   }
 
   renderRow(row) {
@@ -55,20 +64,18 @@ class SongsList extends Component {
 
   render() {
     const {songs} = this.props;
-    const {page, limit} = this.state;
-    const limitValues = [10, 25, 50, 100];
+    const {limit, sort} = this.state;
     const total = songs.length;
-    const paginatedSongs = songs.slice((page - 1) * limit, page * limit);
+    const limitValues = [10, 25, 50, 100];
+    const paginatedSongs = this.getSongs();
     const rows = paginatedSongs.map(this.renderRow);
-
-    const header = this.renderHeader();
 
     return (
       <div>
 
         <Table striped bordered condensed hover>
           <thead>
-          {header}
+          <Header sort={sort} onChange={this.handleSortChange}/>
           </thead>
           <tbody>
           {rows}
