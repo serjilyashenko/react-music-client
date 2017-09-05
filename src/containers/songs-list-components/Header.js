@@ -25,7 +25,6 @@ function handleOnClick(headerProperty, {value, property}, callback) {
 
 function Header(props) {
   const {sort, onChange} = props;
-
   const headers = [
     {title: 'Испольнитель', property: 'artist'},
     {title: 'Песня', property: 'title'},
