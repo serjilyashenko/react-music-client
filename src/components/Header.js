@@ -3,7 +3,7 @@ import { PageHeader } from 'react-bootstrap';
 
 const Header = () => (
   <PageHeader>
-    Hello! <small>music client</small>
+    Hello!!! <small>music client</small>
   </PageHeader>
 );
 
